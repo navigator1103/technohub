@@ -1,0 +1,14 @@
+# Render Blueprint for TechnoForge.
+# Deploys the Vite build output (dist/) as a static site.
+# Docs: https://render.com/docs/blueprint-spec
+services:
+  - type: web
+    name: technohub
+    runtime: static
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
+    # Single-page app: serve index.html for any unknown path.
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
