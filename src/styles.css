@@ -85,6 +85,20 @@ body {
 }
 
 /* ---- Buttons ---- */
+/* Snappy taps on touch (no 300ms delay) and no accidental text selection. */
+.btn,
+.step,
+.flag,
+.tab,
+.seg-btn,
+.bass-toggle,
+.bass-oct button {
+  touch-action: manipulation;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
 .btn {
   background: var(--panel-2);
   color: var(--text);
@@ -210,6 +224,43 @@ input[type="range"] {
   display: flex;
   flex-direction: column;
   gap: 5px;
+}
+
+/* Tap-mode selector */
+.seq-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+.seq-toolbar-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--muted);
+}
+.seg {
+  display: inline-flex;
+  border: 1px solid var(--edge);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.seg-btn {
+  background: var(--panel-2);
+  color: var(--muted);
+  border: none;
+  border-right: 1px solid var(--edge);
+  padding: 7px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.seg-btn:last-child {
+  border-right: none;
+}
+.seg-btn.active {
+  background: var(--accent);
+  color: #150a06;
 }
 .seq-ruler,
 .drum-row {
@@ -457,4 +508,115 @@ input[type="range"] {
   font-size: 11px;
   text-align: center;
   margin-top: 6px;
+}
+
+/* ============================================================================
+   Responsive / mobile
+   ============================================================================ */
+
+/* Tablets and large phones */
+@media (max-width: 720px) {
+  .app {
+    padding: 12px 10px 50px;
+    gap: 10px;
+  }
+  .logo {
+    font-size: 24px;
+  }
+
+  /* Tighten the sequencer so all 16 steps still fit across the screen. */
+  .seq-ruler,
+  .drum-row {
+    grid-template-columns: 84px 1fr;
+    gap: 6px;
+  }
+  .steps {
+    gap: 3px;
+  }
+  .step {
+    height: 30px;
+  }
+  .drum-name {
+    font-size: 11px;
+  }
+
+  /* Mixer: two columns instead of four. */
+  .strips {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Bassline: four columns instead of eight. */
+  .bass-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .sidechain-toggle {
+    margin-left: 0;
+  }
+}
+
+/* Phones */
+@media (max-width: 480px) {
+  .app-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+  }
+
+  /* Transport stacks; make Play/Stop full-width-ish and easy to hit. */
+  .transport {
+    gap: 10px;
+  }
+  .transport .btn {
+    flex: 1 1 40%;
+  }
+  .ctrl {
+    min-width: 0;
+    flex: 1 1 100%;
+  }
+
+  /* Smallest usable step grid: shrink the label column further. */
+  .seq-ruler,
+  .drum-row {
+    grid-template-columns: 60px 1fr;
+    gap: 4px;
+  }
+  .steps {
+    gap: 2px;
+  }
+  .step {
+    height: 28px;
+    border-radius: 4px;
+  }
+  .ruler-cell {
+    font-size: 9px;
+  }
+  .flag {
+    width: 20px;
+    height: 20px;
+  }
+
+  /* Tap-mode buttons span the row for big touch targets. */
+  .seq-toolbar {
+    flex-wrap: wrap;
+  }
+  .seg {
+    flex: 1;
+  }
+  .seg-btn {
+    flex: 1;
+    padding: 8px 6px;
+  }
+
+  /* One bass cell per pair of columns keeps the selects usable. */
+  .bass-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .pc-row {
+    gap: 6px;
+  }
+  .btn.sm {
+    flex: 1 1 auto;
+  }
 }

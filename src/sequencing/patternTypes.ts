@@ -217,6 +217,12 @@ export function makeDefaultProject(): Project {
   };
 }
 
+/**
+ * What a plain tap on a step does. Lets touch users reach accent / probability
+ * / ratchet without the desktop modifier keys (right-click / Shift / Alt).
+ */
+export type TapMode = "step" | "accent" | "prob" | "ratchet";
+
 /** Note names for the bass editor UI. */
 export const NOTE_NAMES = [
   "C",

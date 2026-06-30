@@ -1,17 +1,25 @@
 // DrumTrack — one drum lane: name + mute/solo + the 16-step grid.
 //
-// Step interactions:
-//   left click       -> toggle active
+// Step interactions (desktop modifiers always work):
+//   left click       -> toggle active (or the current Tap mode)
 //   right click      -> toggle accent
 //   alt + click      -> cycle ratchet (1 -> 2 -> 3 -> 4 -> 1)
 //   shift + click    -> cycle probability (100 -> 75 -> 50 -> 25 -> 100)
+//
+// On touch (no modifier keys), a plain tap applies the active `tapMode`, so
+// accent / probability / ratchet stay reachable on phones.
 
 import type { MouseEvent } from "react";
-import type { DrumTrack as DrumTrackType, Step } from "../sequencing/patternTypes";
+import type {
+  DrumTrack as DrumTrackType,
+  Step,
+  TapMode,
+} from "../sequencing/patternTypes";
 
 interface DrumTrackProps {
   track: DrumTrackType;
   currentStep: number;
+  tapMode: TapMode;
   onUpdateStep: (stepIndex: number, patch: Partial<Step>) => void;
   onUpdateTrack: (patch: Partial<DrumTrackType>) => void;
 }
@@ -19,20 +27,33 @@ interface DrumTrackProps {
 export function DrumTrack({
   track,
   currentStep,
+  tapMode,
   onUpdateStep,
   onUpdateTrack,
 }: DrumTrackProps) {
+  const cycleRatchet = (i: number, s: Step) =>
+    onUpdateStep(i, { ratchet: (s.ratchet % 4) + 1, active: true });
+
+  const cycleProbability = (i: number, s: Step) => {
+    const steps = [1, 0.75, 0.5, 0.25];
+    const idx = steps.indexOf(s.probability);
+    onUpdateStep(i, { probability: steps[(idx + 1) % steps.length], active: true });
+  };
+
   const handleClick = (e: MouseEvent, i: number, s: Step) => {
-    if (e.altKey) {
-      const next = (s.ratchet % 4) + 1;
-      onUpdateStep(i, { ratchet: next, active: true });
-    } else if (e.shiftKey) {
-      const steps = [1, 0.75, 0.5, 0.25];
-      const idx = steps.indexOf(s.probability);
-      const next = steps[(idx + 1) % steps.length];
-      onUpdateStep(i, { probability: next, active: true });
-    } else {
-      onUpdateStep(i, { active: !s.active });
+    // Desktop modifier keys take priority and override the tap mode.
+    if (e.altKey) return cycleRatchet(i, s);
+    if (e.shiftKey) return cycleProbability(i, s);
+
+    switch (tapMode) {
+      case "accent":
+        return onUpdateStep(i, { accent: !s.accent, active: true });
+      case "prob":
+        return cycleProbability(i, s);
+      case "ratchet":
+        return cycleRatchet(i, s);
+      default:
+        return onUpdateStep(i, { active: !s.active });
     }
   };
 
