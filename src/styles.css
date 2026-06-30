@@ -129,6 +129,12 @@ body {
   border-color: var(--accent-2);
   color: var(--accent-2);
 }
+.btn.danger {
+  color: #ff6b6b;
+}
+.btn.danger:hover {
+  border-color: #ff6b6b;
+}
 .btn:disabled {
   opacity: 0.5;
   cursor: progress;

@@ -12,8 +12,10 @@ import { AudioEngine } from "./audio/AudioEngine";
 import { Sequencer } from "./sequencing/Sequencer";
 import { exportPatternToWav } from "./audio/WavExporter";
 import {
+  makeBassStep,
   makeDefaultPattern,
   makeId,
+  makeStep,
   type BassStep,
   type DrumTrack as DrumTrackType,
   type Pattern,
@@ -223,6 +225,19 @@ export default function App() {
     replaceSelectedContent(pat, "Generated Groove");
   };
 
+  /** Wipe every drum step + bass note in the current pattern (keeps mixer/tempo). */
+  const clearPattern = () => {
+    if (!window.confirm("Clear all steps and bass notes in this pattern?")) return;
+    mapSelectedPattern((p) => ({
+      ...p,
+      drumTracks: p.drumTracks.map((t) => ({
+        ...t,
+        steps: t.steps.map(() => makeStep()),
+      })),
+      bassline: p.bassline.map(() => makeBassStep()),
+    }));
+  };
+
   // ---- Save / load / export ----
   const saveJson = () => exportProjectFile(projectRef.current);
 
@@ -279,6 +294,7 @@ export default function App() {
         onSelectPattern={selectPattern}
         onNewPattern={newPattern}
         onDuplicatePattern={duplicatePattern}
+        onClearPattern={clearPattern}
         onLoadPreset={loadPreset}
         onGenerate={generate}
         onSaveJson={saveJson}

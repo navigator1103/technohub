@@ -13,6 +13,7 @@ interface PatternControlsProps {
   onSelectPattern: (id: string) => void;
   onNewPattern: () => void;
   onDuplicatePattern: () => void;
+  onClearPattern: () => void;
   onLoadPreset: (presetId: string) => void;
   onGenerate: () => void;
   onSaveJson: () => void;
@@ -29,6 +30,7 @@ export function PatternControls({
   onSelectPattern,
   onNewPattern,
   onDuplicatePattern,
+  onClearPattern,
   onLoadPreset,
   onGenerate,
   onSaveJson,
@@ -60,6 +62,9 @@ export function PatternControls({
         </button>
         <button className="btn sm" onClick={onDuplicatePattern}>
           ⧉ Duplicate
+        </button>
+        <button className="btn sm danger" onClick={onClearPattern}>
+          ✕ Clear
         </button>
         <button className="btn sm accent-btn" onClick={onGenerate}>
           ⚡ Generate Groove
