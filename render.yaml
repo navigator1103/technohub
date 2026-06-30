@@ -7,8 +7,6 @@ services:
     runtime: static
     buildCommand: npm install && npm run build
     staticPublishPath: ./dist
-    # Single-page app: serve index.html for any unknown path.
-    routes:
-      - type: rewrite
-        source: /*
-        destination: /index.html
+    # No SPA rewrite: this app has no client-side routing, and a catch-all
+    # rewrite can interfere with serving hashed /assets/* files. Vite emits a
+    # single index.html plus fingerprinted assets, which are served directly.
