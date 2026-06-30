@@ -77,6 +77,9 @@ export default function App() {
         ).drumTracks,
       );
     }
+    // Unlock synchronously within the gesture (critical for mobile), then make
+    // sure the context is fully running before the sequencer schedules events.
+    engineRef.current.unlock();
     await engineRef.current.resume();
   }, [sidechainEnabled]);
 

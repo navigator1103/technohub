@@ -52,8 +52,26 @@ export class AudioEngine {
    */
   init(): void {
     if (this.ctx) return;
-    const ctx = new AudioContext();
+    // Fall back to the webkit-prefixed constructor for older iOS Safari.
+    const Ctor =
+      window.AudioContext ||
+      (window as unknown as { webkitAudioContext?: typeof AudioContext })
+        .webkitAudioContext;
+    const ctx = new Ctor();
     this.ctx = ctx;
+
+    // iOS 16.4+: route audio to the "playback" session so it is NOT muted by
+    // the hardware silent/ring switch. Harmless / ignored elsewhere.
+    const audioSession = (navigator as unknown as {
+      audioSession?: { type: string };
+    }).audioSession;
+    if (audioSession) {
+      try {
+        audioSession.type = "playback";
+      } catch {
+        /* not supported — ignore */
+      }
+    }
 
     this.masterGain = ctx.createGain();
     this.masterGain.gain.value = 0.85;
@@ -76,9 +94,26 @@ export class AudioEngine {
     this.bass.start(ctx.currentTime);
   }
 
+  /**
+   * Unlock audio on mobile. MUST run synchronously inside the user-gesture
+   * handler (tap/click). Plays a 1-sample silent buffer — the canonical iOS /
+   * Android Web Audio unlock — and kicks off resume(). Without this, mobile
+   * browsers keep the context muted even after resume().
+   */
+  unlock(): void {
+    if (!this.ctx) return;
+    const buffer = this.ctx.createBuffer(1, 1, this.ctx.sampleRate);
+    const src = this.ctx.createBufferSource();
+    src.buffer = buffer;
+    src.connect(this.ctx.destination);
+    src.start(0);
+    // Fire-and-forget resume so we stay inside the gesture tick.
+    if (this.ctx.state !== "running") void this.ctx.resume();
+  }
+
   /** Resume a suspended context (also user-gesture territory). */
   async resume(): Promise<void> {
-    if (this.ctx && this.ctx.state === "suspended") {
+    if (this.ctx && this.ctx.state !== "running") {
       await this.ctx.resume();
     }
   }
