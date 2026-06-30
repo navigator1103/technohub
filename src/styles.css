@@ -1,0 +1,460 @@
+/* ============================================================================
+   TechnoForge — dark, industrial groovebox UI. Plain CSS, no framework.
+   ============================================================================ */
+
+:root {
+  --bg: #0a0a0c;
+  --panel: #141418;
+  --panel-2: #1c1c22;
+  --edge: #2a2a33;
+  --text: #e6e6ea;
+  --muted: #8a8a96;
+  --accent: #ff5c2a; /* forge orange */
+  --accent-2: #2ad1ff; /* cyan */
+  --green: #39d98a;
+  --step-off: #23232b;
+  --step-on: #ff5c2a;
+  --step-accent: #ffd23f;
+  --beat: #2e2e38;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  height: 100%;
+}
+
+body {
+  background: radial-gradient(circle at 50% -10%, #16161c 0%, var(--bg) 60%);
+  color: var(--text);
+  font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+  font-size: 14px;
+}
+
+.app {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 18px 18px 60px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* ---- Header ---- */
+.app-header {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  border-bottom: 1px solid var(--edge);
+  padding-bottom: 10px;
+}
+.logo {
+  margin: 0;
+  font-size: 30px;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+.logo span {
+  color: var(--accent);
+}
+.tagline {
+  color: var(--muted);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* ---- Panels ---- */
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--edge);
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+.panel-title {
+  margin: 0 0 10px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--muted);
+}
+
+/* ---- Buttons ---- */
+.btn {
+  background: var(--panel-2);
+  color: var(--text);
+  border: 1px solid var(--edge);
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.12s;
+}
+.btn:hover {
+  border-color: var(--accent);
+}
+.btn.sm {
+  padding: 6px 10px;
+  font-size: 12px;
+}
+.btn.play.active {
+  background: var(--green);
+  color: #04130c;
+  border-color: var(--green);
+}
+.btn.accent-btn {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.btn.export {
+  border-color: var(--accent-2);
+  color: var(--accent-2);
+}
+.btn:disabled {
+  opacity: 0.5;
+  cursor: progress;
+}
+
+/* ---- Transport ---- */
+.transport {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  background: var(--panel);
+  border: 1px solid var(--edge);
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+.ctrl {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 150px;
+}
+.ctrl label {
+  font-size: 11px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.ctrl input[type="number"] {
+  width: 70px;
+  background: var(--panel-2);
+  border: 1px solid var(--edge);
+  color: var(--text);
+  border-radius: 6px;
+  padding: 4px 6px;
+}
+input[type="range"] {
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+/* ---- Pattern controls ---- */
+.pattern-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.pc-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.tabs {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.tab {
+  background: var(--panel-2);
+  border: 1px solid var(--edge);
+  color: var(--muted);
+  border-radius: 6px;
+  padding: 5px 12px;
+  cursor: pointer;
+  font-size: 12px;
+}
+.tab.active {
+  color: var(--text);
+  border-color: var(--accent);
+  background: #241712;
+}
+.preset-select,
+.bass-controls select {
+  background: var(--panel-2);
+  color: var(--text);
+  border: 1px solid var(--edge);
+  border-radius: 6px;
+  padding: 5px 8px;
+  font-size: 12px;
+}
+.sidechain-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--muted);
+  margin-left: auto;
+}
+
+/* ---- Sequencer grid ---- */
+.sequencer {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.seq-ruler,
+.drum-row {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  align-items: center;
+  gap: 8px;
+}
+.steps {
+  display: grid;
+  grid-template-columns: repeat(16, 1fr);
+  gap: 4px;
+}
+.drum-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+.ruler-head {
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 1px;
+}
+.ruler-cell {
+  text-align: center;
+  font-size: 10px;
+  color: var(--muted);
+  padding: 2px 0;
+}
+.ruler-cell.beat {
+  color: var(--text);
+}
+.ruler-cell.current {
+  color: var(--accent);
+  font-weight: 700;
+}
+.drum-name {
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.drum-flags {
+  display: flex;
+  gap: 4px;
+}
+.flag {
+  width: 22px;
+  height: 22px;
+  border-radius: 5px;
+  border: 1px solid var(--edge);
+  background: var(--panel-2);
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 0;
+}
+.flag.on {
+  background: var(--accent);
+  color: #150a06;
+  border-color: var(--accent);
+}
+.flag.solo.on {
+  background: var(--accent-2);
+  color: #04222a;
+  border-color: var(--accent-2);
+}
+
+/* ---- Step buttons ---- */
+.step {
+  height: 34px;
+  border-radius: 6px;
+  border: 1px solid var(--edge);
+  background: var(--step-off);
+  cursor: pointer;
+  color: #120a06;
+  font-size: 11px;
+  font-weight: 800;
+  transition: transform 0.05s, background 0.08s;
+}
+.step.beat {
+  background: var(--beat);
+}
+.step:hover {
+  border-color: var(--accent);
+}
+.step.active {
+  background: var(--step-on);
+  border-color: var(--step-on);
+  box-shadow: 0 0 8px rgba(255, 92, 42, 0.4);
+}
+.step.active.accent {
+  background: var(--step-accent);
+  border-color: var(--step-accent);
+  box-shadow: 0 0 10px rgba(255, 210, 63, 0.5);
+}
+.step.prob.active {
+  background: repeating-linear-gradient(
+    45deg,
+    var(--step-on),
+    var(--step-on) 4px,
+    #b53d18 4px,
+    #b53d18 8px
+  );
+}
+.step.current {
+  outline: 2px solid #fff;
+  outline-offset: -2px;
+}
+.hint {
+  color: var(--muted);
+  font-size: 11px;
+  margin: 4px 0 0;
+}
+
+/* ---- Two column layout ---- */
+.two-col {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 14px;
+}
+@media (max-width: 900px) {
+  .two-col {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---- Bassline ---- */
+.bass-grid {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 6px;
+}
+.bass-cell {
+  background: var(--panel-2);
+  border: 1px solid var(--edge);
+  border-radius: 6px;
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.bass-cell.beat {
+  border-color: #3a3a45;
+}
+.bass-cell.current {
+  outline: 2px solid var(--accent-2);
+  outline-offset: -2px;
+}
+.bass-toggle {
+  height: 28px;
+  border-radius: 5px;
+  border: 1px solid var(--edge);
+  background: var(--step-off);
+  color: var(--muted);
+  font-weight: 700;
+  cursor: pointer;
+}
+.bass-cell.active .bass-toggle {
+  background: var(--accent-2);
+  color: #04222a;
+  border-color: var(--accent-2);
+}
+.bass-cell.accent .bass-toggle {
+  box-shadow: 0 0 8px rgba(42, 209, 255, 0.5);
+}
+.bass-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.bass-controls select {
+  width: 100%;
+}
+.bass-oct {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.bass-oct button {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  border: 1px solid var(--edge);
+  background: var(--panel);
+  color: var(--text);
+  cursor: pointer;
+}
+.bass-oct span {
+  font-size: 12px;
+}
+.bass-flags {
+  display: flex;
+  gap: 3px;
+}
+.bass-flags .flag {
+  flex: 1;
+  width: auto;
+  font-size: 10px;
+}
+
+/* ---- Mixer ---- */
+.strips {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+.strip {
+  background: var(--panel-2);
+  border: 1px solid var(--edge);
+  border-radius: 8px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.strip-name {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.knob {
+  display: grid;
+  grid-template-columns: 28px 1fr;
+  align-items: center;
+  gap: 6px;
+}
+.knob span {
+  font-size: 10px;
+  color: var(--muted);
+}
+.knob input {
+  width: 100%;
+}
+
+/* ---- Footer ---- */
+.app-footer {
+  color: var(--muted);
+  font-size: 11px;
+  text-align: center;
+  margin-top: 6px;
+}
